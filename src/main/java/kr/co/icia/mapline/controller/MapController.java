@@ -17,7 +17,7 @@ public class MapController {
 	 * 주소를 좌표로 변환
 	 * 
 	 * @param address 주소정보
-	 * @param model   html 파일에 값을 전달해주는 객체
+	 * @param model   html파일에 값을 전달해주는 객체
 	 * @return html 파일위치
 	 * 
 	 */
@@ -29,6 +29,33 @@ public class MapController {
 			model.addAttribute("point", point);
 		}
 		return "map/address_point";
+	}
+	
+	
+	/**
+	 * 출발지와 목적지를 지도상에 표시하기
+	 * 
+	 * @param fromAddress 출발지 주소정보
+	 * @param toAddress 목적지 주소정보
+	 * @param model   html파일에 값을 전달해주는 객체
+	 * @return html 파일위치
+	 * 
+	 */
+	@GetMapping("/map/marker") // url : /map/marker
+	public String getMapMarker(
+			@RequestParam(required = false) String fromAddress, //
+			@RequestParam(required = false) String toAddress, //
+			Model model)
+			throws IOException, InterruptedException {
+		if (fromAddress != null && !fromAddress.isEmpty()) {
+			Point fromPoint = KakaoApiUtil.getPointByAddress(fromAddress);
+			model.addAttribute("fromPoint", fromPoint);
+		}
+		if (toAddress != null && !toAddress.isEmpty()) {
+			Point toPoint = KakaoApiUtil.getPointByAddress(toAddress);
+			model.addAttribute("toPoint", toPoint);
+		}
+		return "map/marker";
 	}
 
 }
